@@ -1,14 +1,18 @@
 import Head from "next/head";
-import { BlockfrostProvider } from "@meshsdk/core";
 import { CardanoWallet, MeshBadge } from "@meshsdk/react";
 
 export default function Home() {
 
   const getHydraHeads = async () => {
-    const blockfrostProvider = new BlockfrostProvider('preview4sobQ9X5iZk8rlppH7YNGbZmnGqoBhp1');
-    let heads = await blockfrostProvider.fetchAccountInfo(
-       'stake_test1uzx0ksy9f4qnj2mzfdncqyjy84sszh64w43853nug5pedjgytgke9',
-     )
+    const blockfrostUrl = "https://cardano-preview.blockfrost.io/api/v0/"
+    const hydraSTPolicyId = "dd8a40ebfbe2eb9351ce4854c791d80d9682e01b20cd4b986868d176"
+    const hydraSTHex = "4879647261486561645631"
+    const assetUrl = "assets/" + hydraSTPolicyId + hydraSTHex
+    const assetPolicyUrl = "assets/policy/" + hydraSTPolicyId
+    const blockfrostHeader = { "project_id": "preview4sobQ9X5iZk8rlppH7YNGbZmnGqoBhp1" }
+    const response = await fetch( blockfrostUrl + assetPolicyUrl , {method: "GET", headers:blockfrostHeader});
+    const heads = await response.json();
+
     console.log("heads", heads);
   };
 
