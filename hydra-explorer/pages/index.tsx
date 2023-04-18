@@ -1,21 +1,15 @@
 import Head from "next/head";
-import { useState } from 'react';
+import { BlockfrostProvider } from "@meshsdk/core";
 import { CardanoWallet, MeshBadge } from "@meshsdk/react";
 
 export default function Home() {
-  const [heads, setHeads] = useState([]);
+
   const getHydraHeads = async () => {
-    const blockfrostUrl = "https://cardano-preview.blockfrost.io/api/v0/"
-    const hydraSTPolicyId = "dd8a40ebfbe2eb9351ce4854c791d80d9682e01b20cd4b986868d176"
-    const hydraSTHex = "4879647261486561645631"
-    const assetUrl = "assets/" + hydraSTPolicyId + hydraSTHex
-    const assetTransactionsUrl = "assets/" + hydraSTPolicyId + hydraSTHex + "/transactions";
-    const assetPolicyUrl = "assets/policy/" + hydraSTPolicyId
-    const blockfrostHeader = { "project_id": "preview4sobQ9X5iZk8rlppH7YNGbZmnGqoBhp1" }
-    const response = await fetch( blockfrostUrl + assetPolicyUrl , {method: "GET", headers:blockfrostHeader});
-    const headsResult = await response.json();
+    const blockfrostProvider = new BlockfrostProvider('*****');
+    let heads = blockfrostProvider.fetchAssetAddresses(
+          'd9312da562da182b02322fd8acb536f37eb9d29fba7c49dc172555274d657368546f6b656e',
+         )
     console.log("heads", heads);
-    setHeads(headsResult);
   };
 
 
@@ -46,14 +40,7 @@ export default function Home() {
             <h2>Hydra explorer</h2>
             <p>Provides useful information on Hydra heads, their status, TVL etc.</p>
           </a>
-         <button onClick={() => getHydraHeads()}> Find Hydra Heads </button>
-         <div>
-           {heads.map(head => (
-             <li key={head.asset}>
-               {head.asset}
-             </li>
-           ))}
-         </div>
+         <button onClick={() => getHydraHeads()}> Submit </button>
         </div>
       </main>
 
